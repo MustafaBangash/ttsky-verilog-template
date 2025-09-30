@@ -23,34 +23,35 @@ project:
 # This section is for the datasheet/website. Use descriptive names (e.g., RX, TX, MOSI, SCL, SEG_A, etc.).
 pinout:
   # Inputs
-  ui[0]: "n0"
-  ui[1]: "n1"
-  ui[2]: "n2"
-  ui[3]: "n3"
-  ui[4]: "n4"
-  ui[5]: "n5"
-  ui[6]: "n6"
-  ui[7]: "n7"
+  ui[0]: "EN"        # count enable
+  ui[1]: "LOAD"      # synchronous load
+  ui[2]: "OE"        # output enable (1=drive, 0=tri-state)
+  ui[3]: ""          # unused
+  ui[4]: ""          # unused
+  ui[5]: ""          # unused
+  ui[6]: ""          # unused
+  ui[7]: ""          # unused
 
-  # Outputs
-  uo[0]: "o0"
-  uo[1]: "o1"
-  uo[2]: "o2"
-  uo[3]: "o3"
-  uo[4]: "o4"
-  uo[5]: "o5"
-  uo[6]: "o6"
-  uo[7]: "o7"
+  # Outputs (always driven)
+  uo[0]: "COUNT0"
+  uo[1]: "COUNT1"
+  uo[2]: "COUNT2"
+  uo[3]: "COUNT3"
+  uo[4]: "COUNT4"
+  uo[5]: "COUNT5"
+  uo[6]: "COUNT6"
+  uo[7]: "COUNT7"
 
-  # Bidirectional pins
-  uio[0]: "b0"
-  uio[1]: "b1"
-  uio[2]: "b2"
-  uio[3]: "b3"
-  uio[4]: "b4"
-  uio[5]: "b5"
-  uio[6]: "b6"
-  uio[7]: "b7"
+  # Bidirectional pins (used for loading data)
+  uio[0]: "D0"
+  uio[1]: "D1"
+  uio[2]: "D2"
+  uio[3]: "D3"
+  uio[4]: "D4"
+  uio[5]: "D5"
+  uio[6]: "D6"
+  uio[7]: "D7"
+
 
 # Do not change!
 yaml_version: 6
