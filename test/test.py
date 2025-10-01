@@ -90,4 +90,42 @@ async def counter_basic(dut):
     dut._log.info(f"After OE=1: expected uio_oe=0xFF, got 0x{uio_oe:02X}")
     assert uio_oe == 0xFF, f"uio_oe expected FF got {uio_oe:02x}"
     
+    # Test counter overflow (wraparound from 0xFF -> 0x00)
+    dut._log.info("Testing counter overflow...")
+    # Load 0xFE to be close to overflow
+    dut.uio_in.value = 0xFE
+    dut.ui_in.value = ui | (1 << LOAD)  # LOAD=1, OE=1
+    await RisingEdge(dut.clk)
+    dut.ui_in.value = ui                # LOAD=0, keep EN=0 for now
+    await wait_for_settling(dut)
+    
+    actual_val = int(dut.uo_out.value)
+    dut._log.info(f"  Loaded 0xFE, got 0x{actual_val:02X}")
+    assert actual_val == 0xFE, f"after load 0xFE got {actual_val:02x}"
+    
+    # Now enable counting
+    dut.ui_in.value = ui | (1 << EN)    # EN=1, OE=1
+    
+    # Count: 0xFE -> 0xFF
+    await RisingEdge(dut.clk)
+    await wait_for_settling(dut)
+    actual_val = int(dut.uo_out.value)
+    dut._log.info(f"  After 1 count: 0x{actual_val:02X} (should be 0xFF)")
+    assert actual_val == 0xFF, f"expected 0xFF got {actual_val:02x}"
+    
+    # Count: 0xFF -> 0x00 (OVERFLOW!)
+    await RisingEdge(dut.clk)
+    await wait_for_settling(dut)
+    actual_val = int(dut.uo_out.value)
+    dut._log.info(f"  After overflow: 0x{actual_val:02X} (should be 0x00)")
+    assert actual_val == 0x00, f"after overflow expected 0x00 got {actual_val:02x}"
+    
+    # Count a few more to confirm it continues: 0x00 -> 0x01 -> 0x02 -> 0x03
+    for i in range(1, 4):
+        await RisingEdge(dut.clk)
+        await wait_for_settling(dut)
+        actual_val = int(dut.uo_out.value)
+        dut._log.info(f"  Count continues: 0x{actual_val:02X}")
+        assert actual_val == i, f"expected {i:02x} got {actual_val:02x}"
+    
     dut._log.info(f"✓ All tests passed in {'GATE-LEVEL' if is_gl else 'RTL'} mode")
