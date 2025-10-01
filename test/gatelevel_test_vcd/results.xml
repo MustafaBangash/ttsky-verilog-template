@@ -1,0 +1,6 @@
+<testsuites name="results">
+  <testsuite name="all" package="all">
+    <property name="random_seed" value="1759294238" />
+    <testcase name="counter_basic" classname="test" file="/home/runner/work/ttsky-verilog-template/ttsky-verilog-template/test/test.py" lineno="36" time="0.012705087661743164" sim_time_ns="271.001" ratio_time="21330.116502542736" />
+  </testsuite>
+</testsuites>
